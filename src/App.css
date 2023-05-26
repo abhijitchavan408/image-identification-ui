@@ -4,7 +4,10 @@
 }
 
 body {
-  background-color: #b5fac7;
+  background-color: #9bf1ad;
+  background-image: url("../public/background_Image.png");
+  /* background-image: url("../public/background-image2.jpg"); */
+  /* background-image: url("../public/background_image3.png"); */
 }
 
 .pages {

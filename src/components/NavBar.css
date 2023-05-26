@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #1f5156;
+  background-color: black;
   height: 80px;
   display: flex;
   justify-content: center;
@@ -12,7 +12,7 @@
 
 .nav-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
   height: 80px;
@@ -43,6 +43,7 @@
   height: 100%;
   border-bottom: 3px solid transparent;
 }
+
 .fa-code {
   margin-left: 1rem;
 }
@@ -59,6 +60,12 @@
   width: 0;
   background: transparent;
   transition: width 0.7s ease, background-color 0.5s ease;
+}
+
+.image {
+  content: "";
+  height: 300px;
+  width: 300px;
 }
 
 .nav-item:hover:after {
@@ -95,10 +102,12 @@
     transition: all 0.5s ease;
     z-index: 1;
   }
+
   .nav-item .active {
     color: #ffdd40;
     border: none;
   }
+
   .nav-links {
     padding: 1.5rem;
     width: 100%;
