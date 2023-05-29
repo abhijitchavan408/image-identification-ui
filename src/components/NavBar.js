@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./NavBar.css";
+import "../css/NavBar.css";
+import logo from "../assests/color-logo.png"
 
 function NavBar() {
   const [click, setClick] = useState(false);
@@ -14,7 +15,9 @@ function NavBar() {
             CodeBucks
             <i className="fas fa-code"></i>
           </NavLink> */}
-
+          <div className="col-7">
+            <img src={logo} style={{ height: 60, width: 130 }} />
+          </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">
               <NavLink
@@ -24,7 +27,7 @@ function NavBar() {
                 className="nav-links"
                 onClick={handleClick}
               >
-                Home
+                Single
               </NavLink>
             </li>
             <li className="nav-item">
@@ -35,7 +38,7 @@ function NavBar() {
                 className="nav-links"
                 onClick={handleClick}
               >
-                About
+                Double
               </NavLink>
             </li>
             <li className="nav-item">
@@ -46,7 +49,7 @@ function NavBar() {
                 className="nav-links"
                 onClick={handleClick}
               >
-                Blog
+                Multiple
               </NavLink>
             </li>
             <li className="nav-item">

@@ -62,12 +62,6 @@
   transition: width 0.7s ease, background-color 0.5s ease;
 }
 
-.image {
-  content: "";
-  height: 300px;
-  width: 300px;
-}
-
 .nav-item:hover:after {
   width: 100%;
   background: #ffdd40;
@@ -123,5 +117,11 @@
     font-size: 1.8rem;
     cursor: pointer;
     color: #ffdd40;
+  }
+
+  .logoimage {
+    content: "";
+    height: 20px;
+    width: 20px;
   }
 }

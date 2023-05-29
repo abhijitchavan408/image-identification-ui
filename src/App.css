@@ -1,13 +1,17 @@
 * {
   margin: 0;
   padding: 0;
+  height: auto;
 }
 
 body {
-  background-color: #9bf1ad;
-  background-image: url("../public/background_Image.png");
+  background-color: black;
+  /* background-image: url("../public/background_Image.png"); */
   /* background-image: url("../public/background-image2.jpg"); */
   /* background-image: url("../public/background_image3.png"); */
+  background-image: url("../src/assests/hpe\ background.png");
+  background-repeat: no-repeat;
+  background-size: 1300px 700px;
 }
 
 .pages {

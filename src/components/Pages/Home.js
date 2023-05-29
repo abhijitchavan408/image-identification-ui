@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { useState } from "react";
-
-
+import HomeService from "../../service/HomeService";
+import "../../css/NavBar.css"
+import "../../css/Home.css"
 
 export const Home = () => {
 
@@ -19,32 +20,44 @@ export const Home = () => {
 
   }
 
+  const uploadImage = () => {
+    HomeService.uploadImage(img).then(Response => {
+      console.log(Response.data);
+    })
+  }
+
   return (
     <div onDragOver={handleDragOver}
       onDrop={handleDrop} className="container">
-      <div className="row">
-        <div className="col-6"></div>
-        <div className="col-6">
+      <div className="row row-cols-auto">
+        <div className="col"></div>
+        <div className="col">
           <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
-          <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
-        </div>
-        <div>
-          &nbsp;
-          <label className="">
-            <input type="file"
-              onChange={(e) => {
-                setImg(e.target.files[0]);
-                setDefaultImg(URL.createObjectURL(e.target.files[0]))
-              }}
-              hidden
-              ref={inputRef} />
-
-          </label>
-          {/* <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button> */}
-
         </div>
       </div>
+      <div className="row">
+        <div className="col-3">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
+          </div>
+          <button type="button" className="btn btn-primary show" onClick={uploadImage}>Submit </button>
+        </div>
+      </div>
+      <div>
+        &nbsp;
+        <label className="">
+          <input type="file"
+            onChange={(e) => {
+              setImg(e.target.files[0]);
+              setDefaultImg(URL.createObjectURL(e.target.files[0]))
+            }}
+            hidden
+            ref={inputRef} />
 
+        </label>
+        {/* <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button> */}
+
+      </div>
     </div>
   );
 };
