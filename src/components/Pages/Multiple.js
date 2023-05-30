@@ -3,7 +3,7 @@ import React from "react";
 export const Multiple = () => {
   return (
     <div>
-      <h1>Blog</h1>
+      <h1>Multiple</h1>
     </div>
   );
 };
