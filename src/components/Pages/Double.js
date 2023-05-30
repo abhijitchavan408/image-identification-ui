@@ -1,6 +1,6 @@
 import React from "react";
 
-export const About = () => {
+export const Double = () => {
   return (
     <div>
       <h1>About</h1>

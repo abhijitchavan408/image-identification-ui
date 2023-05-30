@@ -2,12 +2,12 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import HomeService from "../../service/HomeService";
 import "../../css/NavBar.css"
-import "../../css/Home.css"
+import "../../css/Single.css"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 
-export const Home = () => {
+export const Single = () => {
 
   const percentage = 66;
 
@@ -30,14 +30,14 @@ export const Home = () => {
   // formData.append('name', 'abhijit')
 
   const uploadImage = () => {
-    HomeService.uploadImage(FormData).then(Response => {
+    HomeService.uploadImage(formData).then(Response => {
 
       console.log(Response.data);
-      setStatus(Response.data)
+      setStatus(Response.data.class_label)
     })
       .catch(error => {
         // Handle error
-        console.error("Error uploading image:", error);
+        console.log("Error uploading image:", error);
       });
   }
   const result = () => {
