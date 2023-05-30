@@ -1,0 +1,37 @@
+pipeline 
+{
+     agent {
+     label 'imageidentififr'
+     }
+     environment {     
+    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')     
+} 
+     stages{
+         stage('Checkout') {
+          steps{
+               git 'https://github.com/abhijitchavan408/image-identification-ui.git'
+               }
+          }
+
+          stage('Docker build') {
+          steps{
+               sh 'docker image build -t sumithpe/imageidentifront .'
+               }  
+          }
+
+
+          stage('Docker push') {
+          steps{
+               sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                        sh 'docker image push sumithpe/imageidentifront:latest' 
+          }
+          }
+
+
+
+
+
+     }
+
+
+}
