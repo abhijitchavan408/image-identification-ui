@@ -3,12 +3,18 @@ import { useState } from "react";
 import HomeService from "../../service/HomeService";
 import "../../css/NavBar.css"
 import "../../css/Home.css"
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 
 export const Home = () => {
+
+  const percentage = 66;
 
   const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
   const [img, setImg] = useState([]);
+  const [status, setStatus] = useState("Human")
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -19,11 +25,23 @@ export const Home = () => {
     setDefaultImg(URL.createObjectURL(event.dataTransfer.files[0]))
 
   }
+  const formData = new FormData();
+  formData.append('image', img);
+  // formData.append('name', 'abhijit')
 
   const uploadImage = () => {
-    HomeService.uploadImage(img).then(Response => {
+    HomeService.uploadImage(FormData).then(Response => {
+
       console.log(Response.data);
+      setStatus(Response.data)
     })
+      .catch(error => {
+        // Handle error
+        console.error("Error uploading image:", error);
+      });
+  }
+  const result = () => {
+
   }
 
   return (
@@ -33,6 +51,11 @@ export const Home = () => {
         <div className="col"></div>
         <div className="col">
           <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
+        </div>
+        <div className="box outerbox" style={{ textAlign: "center" }}>
+          {/* <CircularProgressbar className="percentage" value={percentage} text={`${percentage}%`} />
+          <h4>Human Probability</h4> */}
+          <h3>{status}</h3>
         </div>
       </div>
       <div className="row">
@@ -47,6 +70,7 @@ export const Home = () => {
         &nbsp;
         <label className="">
           <input type="file"
+            name="image"
             onChange={(e) => {
               setImg(e.target.files[0]);
               setDefaultImg(URL.createObjectURL(e.target.files[0]))
@@ -58,6 +82,6 @@ export const Home = () => {
         {/* <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button> */}
 
       </div>
-    </div>
+    </div >
   );
 };

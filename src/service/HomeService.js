@@ -1,12 +1,20 @@
 import axios from 'axios';
-axios.defaults.baseURL = "http://34.136.177.220:5000";
+axios.defaults.baseURL = "http://34.136.177.220:8000";
 
-function uploadImage(body) {
+function uploadImage(data) {
     //make api call for auth
-    console.log('post call', body);
-    return axios.post('/image', {
-        image: body
-    });
+    console.log("post call")
+    // for (const pair of data) {
+    //     console.log(pair[0] + ', ' + pair[1]);
+    // }
+    return axios.post("/image", data,
+        {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+
+    )
 }
 
 export default { uploadImage }
