@@ -27,7 +27,7 @@ export const Single = () => {
   }
   const formData = new FormData();
   formData.append('image', img);
-  // formData.append('name', 'abhijit')
+
 
   const uploadImage = () => {
     HomeService.uploadImage(formData).then(Response => {
