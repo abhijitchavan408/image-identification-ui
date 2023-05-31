@@ -7,12 +7,11 @@ pipeline{
 } 
      stages{
          stage('Checkout') {
-          steps{
-          
+          steps{  
           git 'https://github.com/abhijitchavan408/image-identification-ui.git'
                }
           }
-          
+      
           stage('Docker build'){
           steps{
                sh 'docker image build -t sumithpe/imageidentifrontapp:31 .'
