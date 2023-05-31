@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { useState } from "react";
-import HomeService from "../../service/HomeService";
+import SingleService from "../../service/SingleService";
 import "../../css/NavBar.css"
 import "../../css/Single.css"
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
+import { ImCheckmark, ImCross } from "react-icons/im";
 
 export const Single = () => {
 
@@ -14,7 +14,8 @@ export const Single = () => {
   const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
   const [img, setImg] = useState([]);
-  const [status, setStatus] = useState(" ")
+  const [status, setStatus] = useState(false)
+  const [response, setResponse] = useState(" ")
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -30,16 +31,25 @@ export const Single = () => {
 
 
   const uploadImage = () => {
-    HomeService.uploadImage(formData).then(Response => {
+    setStatus(true);
+    SingleService.uploadImage(formData).then(Response => {
 
       console.log(Response.data);
-      setStatus(Response.data.class_label)
+      setResponse(Response.data.identity)
     })
       .catch(error => {
         // Handle error
         console.log("Error uploading image:", error);
       });
   }
+  const correct = () => {
+    SingleService.feedback("correct")
+  }
+
+  const wrong = () => {
+    SingleService.feedback("wrong")
+  }
+
   const result = () => {
 
   }
@@ -52,11 +62,16 @@ export const Single = () => {
         <div className="col">
           <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
         </div>
-        <div className="box outerbox" style={{ textAlign: "center" }}>
-          {/* <CircularProgressbar className="percentage" value={percentage} text={`${percentage}%`} />
+        {status &&
+          <div className="box outerbox" style={{ textAlign: "center" }}>
+            {/* <CircularProgressbar className="percentage" value={percentage} text={`${percentage}%`} />
           <h4>Human Probability</h4> */}
-          <h3>{status}</h3>
-        </div>
+            <h3>{response}</h3>
+            <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
+              <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
+            </p>
+          </div>
+        }
       </div>
       <div className="row">
         <div className="col-3">

@@ -1,7 +1,7 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Single } from "./components/Pages/Single.js";
+import { Single } from "./components/Pages/Single";
 import { Double } from "./components/Pages/Double";
 import { Multiple } from "./components/Pages/Multiple";
 import { Contact } from "./components/Pages/Contact";
