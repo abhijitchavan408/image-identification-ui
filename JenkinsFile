@@ -8,14 +8,14 @@ pipeline{
      stages{
          stage('Checkout') {
           steps{ 
-          pwd
+          sh 'pwd'
           git branch: 'main', url: 'https://github.com/abhijitchavan408/image-identification-ui.git'
                }
           }
       
           stage('Docker build'){
           steps{
-          pwd
+          sh 'pwd'
                sh 'docker image build -t sumithpe/imageidentifrontapp:31 .'
                }  
           }
