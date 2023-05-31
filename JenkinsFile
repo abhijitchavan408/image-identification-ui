@@ -9,7 +9,7 @@ pipeline{
          stage('Checkout') {
           steps{
           
-          git 'https://github.com/sumit871996/imageIdentificationFR.git'
+          git 'https://github.com/abhijitchavan408/image-identification-ui.git'
                }
           }
           
