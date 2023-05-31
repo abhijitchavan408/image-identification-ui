@@ -8,8 +8,8 @@ pipeline{
      stages{
          stage('Checkout') {
           steps{
-          git branch: 'main', credentialsId: 'dockerhub_id1', url: 'https://github.com/abhijitchavan408/image-identification-ui.git'
-          git 'https://github.com/abhijitchavan408/image-identification-ui.git'
+          
+          git 'https://github.com/sumit871996/imageIdentificationFR.git'
                }
           }
           
