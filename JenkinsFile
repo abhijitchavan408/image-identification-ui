@@ -1,10 +1,11 @@
-def IMAGE_TAG = "32"
+def IMAGE_TAG = 32
 pipeline{
      agent{
      label 'imageidentificationfront'
      }
      environment{     
-    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')     
+    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id') 
+    IMAGE_TAG = 32
 } 
      stages{
          stage('Checkout') {
@@ -17,7 +18,7 @@ pipeline{
           stage('Docker build'){
           steps{
           sh 'pwd'
-               sh 'docker image build -t sumithpe/imagefrontidentification:${IMAGE_TAG} .'
+               sh 'docker image build -t sumithpe/imagefrontidentification:$IMAGE_TAG .'
                }  
           }
           
@@ -25,7 +26,7 @@ pipeline{
           stage('Docker push'){
           steps{
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                        sh 'docker image push sumithpe/imagefrontidentification:${IMAGE_TAG}' 
+                        sh 'docker image push sumithpe/imagefrontidentification:$IMAGE_TAG' 
           }
           }    
      }
