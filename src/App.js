@@ -15,9 +15,9 @@ function App() {
         <div className="pages">
           <Routes>
             <Route path="/" element={<Single />} />
-            <Route path="/Double" element={<Double />} />
-            <Route path="/Multiple" element={<Multiple />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/double" element={<Double />} />
+            <Route path="/multiple" element={<Multiple />} />
+            {/* <Route path="/contact" element={<Contact />} /> */}
           </Routes>
         </div>
       </Router>

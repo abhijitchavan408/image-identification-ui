@@ -30,10 +30,10 @@ export const Single = () => {
   formData.append('image', img);
 
 
-  const uploadImage = () => {
-    setStatus(true);
-    SingleService.uploadImage(formData).then(Response => {
+  const submit = () => {
 
+    SingleService.uploadImage(formData).then(Response => {
+      setStatus(true);
       console.log(Response.data);
       setResponse(Response.data.identity)
     })
@@ -78,7 +78,7 @@ export const Single = () => {
           <div class="btn-group" role="group" aria-label="Basic example">
             <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
           </div>
-          <button type="button" className="btn btn-primary show" onClick={uploadImage}>Submit </button>
+          <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
         </div>
       </div>
       <div>
@@ -86,6 +86,7 @@ export const Single = () => {
         <label className="">
           <input type="file"
             name="image"
+            accept=".png"
             onChange={(e) => {
               setImg(e.target.files[0]);
               setDefaultImg(URL.createObjectURL(e.target.files[0]))

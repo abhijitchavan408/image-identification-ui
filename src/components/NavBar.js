@@ -11,11 +11,7 @@ function NavBar() {
     <>
       <nav className="navbar">
         <div className="nav-container">
-          {/* <NavLink exact to="/" className="nav-logo">
-            CodeBucks
-            <i className="fas fa-code"></i>
-          </NavLink> */}
-          <div className="col-7">
+          <div className="col-8">
             <img src={logo} style={{ height: 60, width: 130 }} />
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
@@ -33,7 +29,7 @@ function NavBar() {
             <li className="nav-item">
               <NavLink
                 exact
-                to="/about"
+                to="/double"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
@@ -44,7 +40,7 @@ function NavBar() {
             <li className="nav-item">
               <NavLink
                 exact
-                to="/blog"
+                to="/multiple"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
@@ -52,7 +48,7 @@ function NavBar() {
                 Multiple
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink
                 exact
                 to="/contact"
@@ -62,7 +58,7 @@ function NavBar() {
               >
                 Contact Us
               </NavLink>
-            </li>
+            </li> */}
           </ul>
           <div className="nav-icon" onClick={handleClick}>
             <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
