@@ -1,10 +1,10 @@
-def IMAGE_TAG = 32
 pipeline{
      agent{
      label 'imageidentificationfront'
      }
      environment{     
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id') 
+    IMAGE_TAG = 32
     
 } 
      stages{
