@@ -1,4 +1,3 @@
-def IMAGE_TAG = 32
 pipeline{
      agent{
      label 'imageidentificationfront'
