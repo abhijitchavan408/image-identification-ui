@@ -18,7 +18,7 @@ export const Double = () => {
   const [img, setImg] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [status, setStatus] = useState(false)
-  const [response, setResponse] = useState(" ")
+  const [response, setResponse] = useState([])
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -34,7 +34,11 @@ export const Double = () => {
   const uploadImage = (e) => {
     const images = e.target.files;
 
-    const allowedImages = Array.from(images).slice(0, 2);
+    // const allowedImages = Array.from(images).slice(0, 2);
+
+    const allowedImages = Array.from(images).filter(
+      (file) => file.type === 'image/png' && img.length < 2
+    );
 
     setImg([...img, ...allowedImages]);
 
@@ -59,7 +63,9 @@ export const Double = () => {
     DoubleService.uploadImage(formData).then(Response => {
       setStatus(true);
       console.log(Response.data.image1.identity);
-      setResponse(Response.data.identity)
+      console.log(Response.data.image2.identity);
+
+      setResponse([Response.data.image1.identity, Response.data.image2.identity])
     })
       .catch(error => {
         // Handle error
@@ -81,38 +87,26 @@ export const Double = () => {
   return (
     <div onDragOver={handleDragOver}
       onDrop={handleDrop} className="container">
-      <div className="row">
+      <div className="row row-cols-auto">
         {/* <div className="col"></div> */}
 
         {previewImages.map((image, index) => (
-          <img key={index} src={image} alt={`Preview ${index}`} className="rounded-circle image" />
+          <div>
+
+            <div className="col">
+              {/* <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" /> */}
+              <img key={index} src={image} alt={`Preview ${index}`} className="rounded-circle image" />
+            </div>
+            {status &&
+              <div className="box outerbox col">
+                <h3>{response[index]}</h3>
+                <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
+                  <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
+                </p>
+              </div>}
+          </div>
         ))}
 
-        {/* <div className="col-3">
-          <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
-        </div>
-        {status &&
-          <div className="box outerbox col-3">
-            <h3>{response}</h3>
-            <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
-              <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
-            </p>
-          </div>
-        } */}
-
-        {/* <div className="col-3">
-          <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
-        </div>
-
-        {status &&
-          //conditional rendering after response come
-          <div className="box outerbox col-3">
-            <h3>{response}</h3>
-            <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
-              <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
-            </p>
-          </div>
-        } */}
       </div>
       <div className="row">
         <div className="col-5">
