@@ -4,6 +4,7 @@ pipeline{
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
     GITHUB_CREDENTIALS= credentials('github_id')
     REVISION = 32
+    ENCODED_PASS = ""
     
 } 
      stages{
@@ -62,10 +63,15 @@ pipeline{
      label 'argocd'
      }
           steps{
-          cd /home/hpe/imageidentification/imageidentificationconfig/
-          withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]) {
-                              sh 'git push'
-                              }
+          withCredentials([usernamePassword(credentialsId: github_id, usernameVariable: "$GITHUB_CREDENTIALS_USR", passwordVariable: "$GITHUB_CREDENTIALS_PSW")]) {
+                    script {
+                        $ENCODED_PASS=URLEncoder.encode(PASS, "UTF-8")
+                    }
+                    sh 'git clone https://$GITHUB_CREDENTIALS_USR:$ENCODED_PASS@https://github.com/sumit871996/imageidentificationconfig.git /home/hpe/imageidentification/imageidentificationconfig/ -b main'
+                    sh 'git add .'
+                    sh 'git commit -m "updated file" '
+                    sh 'git push'
+                }
           } 
      }
 }
