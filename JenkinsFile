@@ -63,11 +63,9 @@ pipeline{
      label 'argocd'
      }
           steps{
+          cd /home/hpe/imageidentification/imageidentificationconfig/
           withCredentials([usernamePassword(credentialsId: github_id, usernameVariable: "$GITHUB_CREDENTIALS_USR", passwordVariable: "$GITHUB_CREDENTIALS_PSW")]) {
-                    script {
-                        $ENCODED_PASS=URLEncoder.encode(PASS, "UTF-8")
-                    }
-                    sh 'git clone https://$GITHUB_CREDENTIALS_USR:$ENCODED_PASS@https://github.com/sumit871996/imageidentificationconfig.git /home/hpe/imageidentification/imageidentificationconfig/ -b main'
+                    sh 'git clone https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@https://github.com/sumit871996/imageidentificationconfig.git -b main'
                     sh 'git add .'
                     sh 'git commit -m "updated file" '
                     sh 'git push'
