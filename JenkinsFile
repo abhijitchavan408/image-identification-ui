@@ -62,10 +62,10 @@ pipeline{
      label 'argocd'
      }
           steps{
-          sh '''
-          cd /home/hpe/imageidentification/imageidentificationconfig && git push -u $GITHUB_CREDENTIALS_USR -p $GITHUB_CREDENTIALS_PSW
-              '''
-          }
+          cd /home/hpe/imageidentification/imageidentificationconfig/
+          withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]) {
+                              sh 'git push'
+                              }
           } 
      }
 }
