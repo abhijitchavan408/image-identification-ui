@@ -4,7 +4,6 @@ pipeline{
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
     GITHUB_CREDENTIALS= credentials('github_id')
     REVISION = 33
-    ENCODED_PASS = ""
     
 } 
      stages{
@@ -52,9 +51,9 @@ pipeline{
      }
           steps{
           sh '''
-               cd /home/hpe/imageidentification/imageidentificationconfig && git branch: 'main', url: 'https://github.com/sumit871996/imageidentificationconfig.git'
-               sh frontendscript.sh $REVISION
-              '''
+               cd /home/hpe/imageidentification/imageidentificationconfig
+                    git pull https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
+                    '''
           }
           } 
           
