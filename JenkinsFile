@@ -34,7 +34,7 @@ pipeline{
           steps{
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         sh "docker image push sumithpe/imagefrontidentification:$REVISION"
-               sh 'curl -X POST -H "Content-Type: application/json" http://20.21.101.237:8080/jenkins/generic-webhook-trigger/invoke?token=harbor'
+               sh 'curl -vs http://20.21.101.237:8080/jenkins/generic-webhook-trigger/invoke?token=harbor'
           }
           }   
           
