@@ -52,7 +52,7 @@ pipeline{
      }
           steps{
           sh '''
-               cd /home/hpe/imageidentification/imageidentificationconfig && git pull
+               cd /home/hpe/imageidentification/imageidentificationconfig && git branch: 'main', url: 'https://github.com/sumit871996/imageidentificationconfig.git'
                sh frontendscript.sh $REVISION
               '''
           }
