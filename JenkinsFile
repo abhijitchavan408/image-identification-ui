@@ -1,7 +1,5 @@
 pipeline{
-     agent{
-     label 'imageidentificationfront'
-     }
+     agent none
      environment{     
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id') 
     REVISION = 32
@@ -9,6 +7,9 @@ pipeline{
 } 
      stages{
          stage('Checkout') {
+         agent{
+     label 'imageidentificationfront'
+     }
           steps{ 
           sh 'pwd'
           git branch: 'main', url: 'https://github.com/abhijitchavan408/image-identification-ui.git'
@@ -16,6 +17,9 @@ pipeline{
           }
       
           stage('Docker build'){
+          agent{
+     label 'imageidentificationfront'
+     }
           steps{
                sh "docker image build -t sumithpe/imagefrontidentification:$REVISION ."
                }  
@@ -23,10 +27,32 @@ pipeline{
           
           
           stage('Docker push'){
+          agent{
+     label 'imageidentificationfront'
+     }
           steps{
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         sh "docker image push sumithpe/imagefrontidentification:$REVISION" 
           }
-          }    
+          }   
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          stage('Git pull'){
+          agent{
+     label ''
+     }
+          steps{
+          sh '''
+               cd /home/hpe/imageidentification/imageidentificationconfig && git pull
+              '''
+          }
+          } 
      }
 }
