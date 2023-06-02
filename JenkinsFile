@@ -63,7 +63,10 @@ pipeline{
      label 'argocd'
      }
           steps{
-                    sh 'git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@https://github.com/sumit871996/imageidentificationconfig.git -b main'
+                    sh '''
+                    cd /home/hpe/imageidentification/imageidentificationconfig
+                    git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@https://github.com/sumit871996/imageidentificationconfig.git
+                    '''
                 }
           } 
      }
