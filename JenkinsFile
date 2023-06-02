@@ -63,9 +63,7 @@ pipeline{
      }
           steps{
           sh '''
-          sh 'sudo git config --global user.name sumit871996'
-          sh 'sudo git config --global user.email "mandlik.sumit871996@gmail.com"'
-          cd /home/hpe/imageidentification/imageidentificationconfig && echo $GITHUB_CREDENTIALS_PSW | git push -u $GITHUB_CREDENTIALS_USR --password-stdin
+          cd /home/hpe/imageidentification/imageidentificationconfig && git push -u $GITHUB_CREDENTIALS_USR -p $GITHUB_CREDENTIALS_PSW
               '''
           }
           } 
