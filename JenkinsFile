@@ -46,7 +46,7 @@ pipeline{
           
           stage('Git pull'){
           agent{
-     label ''
+     label 'argocd'
      }
           steps{
           sh '''
