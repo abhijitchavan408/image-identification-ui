@@ -1,7 +1,8 @@
 pipeline{
      agent none
      environment{     
-    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id') 
+    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
+    GITHUB_CREDENTIALS= credentials('github_id')
     REVISION = 32
     
 } 
@@ -62,7 +63,7 @@ pipeline{
      }
           steps{
           sh '''
-               cd /home/hpe/imageidentification/imageidentificationconfig && git push
+               cd /home/hpe/imageidentification/imageidentificationconfig && echo $GITHUB_CREDENTIALS_PSW | git push -u $GITHUB_CREDENTIALS_USR --password-stdin
               '''
           }
           } 
