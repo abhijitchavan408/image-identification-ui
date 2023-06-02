@@ -51,6 +51,18 @@ pipeline{
           steps{
           sh '''
                cd /home/hpe/imageidentification/imageidentificationconfig && git pull
+               sh frontendscript.sh 32
+              '''
+          }
+          } 
+          
+          stage('Git push'){
+          agent{
+     label 'argocd'
+     }
+          steps{
+          sh '''
+               cd /home/hpe/imageidentification/imageidentificationconfig && git push
               '''
           }
           } 
