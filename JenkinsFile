@@ -54,6 +54,8 @@ pipeline{
                cd /home/hpe/imageidentification/imageidentificationconfig
                     git pull https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
                     sh frontendscript.sh "$REVISION"
+                    git add .
+                    git commit -m "updated deployment file"
                     git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
                     '''
           }
