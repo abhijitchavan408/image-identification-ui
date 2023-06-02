@@ -45,7 +45,7 @@ pipeline{
           
           
           
-          stage('Git pull'){
+          stage('Git update'){
           agent{
      label 'argocd'
      }
@@ -53,20 +53,12 @@ pipeline{
           sh '''
                cd /home/hpe/imageidentification/imageidentificationconfig
                     git pull https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
+                    sh frontendscript.sh "$REVISION"
+                    git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
                     '''
           }
           } 
           
-          stage('Git push'){
-          agent{
-     label 'argocd'
-     }
-          steps{
-                    sh '''
-                    cd /home/hpe/imageidentification/imageidentificationconfig
-                    git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
-                    '''
-                }
-          } 
+          
      }
 }
