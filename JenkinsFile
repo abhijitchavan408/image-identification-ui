@@ -53,7 +53,7 @@ pipeline{
           steps{
           sh '''
                cd /home/hpe/imageidentification/imageidentificationconfig && git pull
-               sh frontendscript.sh 32
+               sh frontendscript.sh $REVISION
               '''
           }
           } 
