@@ -3,7 +3,8 @@ pipeline{
      environment{     
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
     GITHUB_CREDENTIALS= credentials('github_id')
-    REVISION = 50
+    REVISION = 52
+    HARBOR_CREDENTIALS = credentials('harbor_id') 
     
 } 
      stages{
@@ -22,6 +23,7 @@ pipeline{
      label 'imageidentificationfront'
      }
           steps{
+          sh "docker image prune -af"
                sh "docker image build -t sumithpe/imagefrontidentification:$REVISION ."
                }  
           }
@@ -34,7 +36,7 @@ pipeline{
           steps{
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                         sh "docker image push sumithpe/imagefrontidentification:$REVISION"
-               sh 'curl -vs http://20.21.101.237:8080/jenkins/generic-webhook-trigger/invoke?token=harbor'
+               
           }
           }   
           
@@ -50,17 +52,47 @@ pipeline{
           agent{
      label 'argocd'
      }
-          steps{
-          sh '''
-               cd /home/hpe/imageidentification/imageidentificationconfig
+     
+     steps {
+            script {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh '''
+                 cd /home/hpe/imageidentification/imageidentificationconfig
                     git pull https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
                     sh frontendscript.sh "$REVISION"
                     git add .
                     git commit -m "updated deployment file"
                     git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
                     '''
-          }
+                    }
+                }
+            }
+          
           } 
+          
+          
+          
+          
+          
+          
+          
+          stage('Push to harbor'){
+          agent{
+        label 'harbor_node'
+    }
+            steps{
+            sh "docker image prune -af"
+                sh "docker image pull sumithpe/imagefrontidentification:$REVISION"
+                  sh "docker image tag sumithpe/imagefrontidentification:$REVISION 20.21.104.152/imageidentification/imagefrontidentification:$REVISION"
+                sh 'echo $HARBOR_CREDENTIALS_PSW | docker login 20.21.104.152 -u $HARBOR_CREDENTIALS_USR --password-stdin'  
+                sh "docker image push 20.21.104.152/imageidentification/imagefrontidentification:$REVISION"
+            }
+        }
+        
+      
+
+        
+       
           
           
      }
