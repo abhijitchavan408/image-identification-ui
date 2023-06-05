@@ -1,14 +1,16 @@
 pipeline{
-     agent{
-     label 'imageidentificationfront'
-     }
+     agent none
      environment{     
-    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id') 
-    REVISION = 32
+    DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
+    GITHUB_CREDENTIALS= credentials('github_id')
+    REVISION = 49
     
 } 
      stages{
          stage('Checkout') {
+         agent{
+     label 'imageidentificationfront'
+     }
           steps{ 
           sh 'pwd'
           git branch: 'main', url: 'https://github.com/abhijitchavan408/image-identification-ui.git'
@@ -16,18 +18,50 @@ pipeline{
           }
       
           stage('Docker build'){
+          agent{
+     label 'imageidentificationfront'
+     }
           steps{
-          sh 'pwd'
-               sh 'docker image build -t sumithpe/imagefrontidentification:$REVISION .'
+               sh "docker image build -t sumithpe/imagefrontidentification:$REVISION ."
                }  
           }
           
           
           stage('Docker push'){
+          agent{
+     label 'imageidentificationfront'
+     }
           steps{
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                        sh 'docker image push sumithpe/imagefrontidentification:$REVISION' 
+                        sh "docker image push sumithpe/imagefrontidentification:$REVISION"
+               sh 'curl -vs http://20.21.101.237:8080/jenkins/generic-webhook-trigger/invoke?token=harbor'
           }
-          }    
+          }   
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          stage('Git update'){
+          agent{
+     label 'argocd'
+     }
+          steps{
+          sh '''
+               cd /home/hpe/imageidentification/imageidentificationconfig
+                    git pull https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
+                    sh frontendscript.sh "$REVISION"
+                    git add .
+                    git commit -m "updated deployment file"
+                    git push https://"$GITHUB_CREDENTIALS_USR":"$GITHUB_CREDENTIALS_PSW"@github.com/sumit871996/imageidentificationconfig.git
+                    '''
+          }
+          } 
+          
+          
      }
 }
