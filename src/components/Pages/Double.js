@@ -34,9 +34,10 @@ export const Double = () => {
   const uploadImage = (e) => {
     const images = e.target.files;
 
-    // const allowedImages = Array.from(images).slice(0, 2);
+    //const allowedImages = Array.from(images).slice(0, 2) && img.length < 2
 
-    const allowedImages = Array.from(images).filter(
+    //allowed only select two images and total also only two images.
+    const allowedImages = Array.from(Array.from(images).slice(0, 2)).filter(
       (file) => file.type === 'image/png' && img.length < 2
     );
 
