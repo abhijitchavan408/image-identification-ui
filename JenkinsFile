@@ -49,10 +49,6 @@ pipeline{
           
           
           stage('Git update'){
-          agent{
-     label 'argocd'
-     }
-     
      steps {
             script {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
