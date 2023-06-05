@@ -49,7 +49,9 @@ pipeline{
           
           
           stage('Git update'){
-          agent any
+          agent{
+     label 'imageidentificationfront'
+     }
      steps {
             script {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
