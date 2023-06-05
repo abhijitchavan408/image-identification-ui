@@ -49,6 +49,7 @@ pipeline{
           
           
           stage('Git update'){
+          agent any
      steps {
             script {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
