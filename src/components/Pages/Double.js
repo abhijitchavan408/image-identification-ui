@@ -86,7 +86,19 @@ export const Double = () => {
 
   return (
     <div onDragOver={handleDragOver}
-      onDrop={handleDrop} className="container">
+      onDrop={handleDrop} className="container-fluid">
+
+
+      <div className="row ">
+        <div className="col button">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
+          </div>
+          <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
+        </div>
+      </div>
+
+
       <div className="row row-cols-auto">
         {/* <div className="col"></div> */}
 
@@ -108,14 +120,6 @@ export const Double = () => {
         ))}
 
       </div>
-      <div className="row">
-        <div className="col-5">
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
-          </div>
-          <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
-        </div>
-      </div>
       <div>
         &nbsp;
         <label className="">
@@ -128,7 +132,6 @@ export const Double = () => {
             ref={inputRef} />
 
         </label>
-        {/* <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button> */}
 
       </div>
     </div >

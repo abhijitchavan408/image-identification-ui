@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../css/NavBar.css";
-import logo from "../assests/color-logo.png"
+import logo from "../assests/hpe_pri_grn_rev_rgb.png"
 
 function NavBar() {
   const [click, setClick] = useState(false);
@@ -11,8 +11,8 @@ function NavBar() {
     <>
       <nav className="navbar">
         <div className="nav-container">
-          <div className="col-8">
-            <img src={logo} style={{ height: 60, width: 130 }} />
+          <div className="col">
+            <img src={logo} className="nav-logo" />
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">

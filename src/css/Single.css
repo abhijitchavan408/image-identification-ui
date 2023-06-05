@@ -1,5 +1,6 @@
 .button {
-    color: #12da79
+    display: flex;
+    justify-content: end;
 }
 
 .image {
