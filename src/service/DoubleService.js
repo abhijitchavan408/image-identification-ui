@@ -1,5 +1,5 @@
 import axios from 'axios';
-axios.defaults.baseURL = "http://fastapiservice.argocd-image:8000";
+axios.defaults.baseURL = "http://fastapiservice:8000";
 
 function uploadImage(data) {
     //make api call for auth
