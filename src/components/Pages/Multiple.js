@@ -3,20 +3,21 @@ import { useState } from "react";
 import MultipleService from "../../service/MultipleService";
 import "../../css/NavBar.css"
 import "../../css/Single.css"
-import { CircularProgressbar } from 'react-circular-progressbar';
+import { LoadingBar } from "../LoadingBar";
 import 'react-circular-progressbar/dist/styles.css';
 import { ImCheckmark, ImCross } from "react-icons/im";
+import Swal from 'sweetalert2'
 
 export const Multiple = () => {
 
-  const percentage = 66;
-
-  const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
   const [img, setImg] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [status, setStatus] = useState(false)
   const [response, setResponse] = useState([])
+  const [loading, setLoading] = useState(false)
+
+
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -24,24 +25,21 @@ export const Multiple = () => {
   const handleDrop = (event) => {
     event.preventDefault();
     setImg(event.dataTransfer.files[0]);
-    setDefaultImg(URL.createObjectURL(event.dataTransfer.files[0]))
-
   }
 
   //selecting the multiple images
   const uploadImage = (e) => {
     const images = e.target.files;
 
+    const uniqueFiles = Array.from([...img, ...images]).reduce((unique, file) => {
+      const fileExists = unique.some((item) => item.name === file.name);
+      return fileExists ? unique : [...unique, file];
+    }, []);
 
-    setImg([...img, ...images]);
+    setImg(uniqueFiles);
 
-    //setImg(...img, ...Images); ---- for multiple images
-
-    setDefaultImg(URL.createObjectURL(e.target.files[0]))
-
-
-    const imagesArray = Array.from(images).map((file) => URL.createObjectURL(file));
-    setPreviewImages([...previewImages, ...imagesArray]);
+    const imagesArray = Array.from(uniqueFiles).map((file) => URL.createObjectURL(file));
+    setPreviewImages([...imagesArray]);
   }
 
   //formData object 
@@ -55,17 +53,37 @@ export const Multiple = () => {
 
   const submit = () => {
 
-    MultipleService.uploadImage(formData).then(Response => {
-      setStatus(true);
-      console.log(Response.data.image1.identity);
-      console.log(Response.data.image2.identity);
+    if (img.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: 'Warning',
+        text: "select image!!",
+      })
 
-      setResponse([Response.data.image1.identity, Response.data.image2.identity])
-    })
-      .catch(error => {
-        // Handle error
-        console.log("Error uploading image:", error);
-      });
+    } else {
+      setLoading(true);// on the loading bar
+
+      MultipleService.uploadImage(formData).then(Response => {
+
+        setLoading(false); // off the loading bar
+        setStatus(true);
+        console.log(Response.data.image1.identity);
+        console.log(Response.data.image2.identity);
+
+        setResponse([Response.data.image1.identity, Response.data.image2.identity])
+      })
+        .catch(error => {
+          setLoading(false); // off the loading bar
+          // Handle error
+
+          Swal.fire({
+            icon: "error",
+            title: 'Error',
+            text: "Some thing went wrong",
+          })
+          console.log("Error uploading image:", error);
+        });
+    }
   }
 
   const correct = () => {
@@ -83,10 +101,10 @@ export const Multiple = () => {
 
       <div className="row">
         <div className="col button">
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
+          <div class="btn-group" role="group" aria-label="Basic example" >
+            <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
           </div>
-          <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
         </div>
       </div>
 
@@ -99,6 +117,9 @@ export const Multiple = () => {
               {/* <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" /> */}
               <img key={index} src={image} alt={`Preview ${index}`} className="rounded-circle image" />
             </div>
+
+            {loading && <LoadingBar></LoadingBar>}
+
             {status &&
               <div className="box outerbox col">
                 <h3>{response[index]}</h3>

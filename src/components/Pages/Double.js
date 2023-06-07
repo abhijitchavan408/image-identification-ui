@@ -4,21 +4,21 @@ import { useState } from "react";
 import DoubleService from "../../service/DoubleService";
 import "../../css/NavBar.css"
 import "../../css/Single.css"
-import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { ImCheckmark, ImCross } from "react-icons/im";
-
+import { LoadingBar } from "../LoadingBar";
+import Swal from 'sweetalert2'
 
 export const Double = () => {
 
-  const percentage = 66;
-
-  const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
   const [img, setImg] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [status, setStatus] = useState(false)
   const [response, setResponse] = useState([])
+  const [loading, setLoading] = useState(false)
+
+
   const handleDragOver = (event) => {
     event.preventDefault();
   }
@@ -26,30 +26,33 @@ export const Double = () => {
   const handleDrop = (event) => {
     event.preventDefault();
     setImg(event.dataTransfer.files[0]);
-    setDefaultImg(URL.createObjectURL(event.dataTransfer.files[0]))
-
   }
 
   //selecting the multiple images
   const uploadImage = (e) => {
+    setPreviewImages([]);  // clear the previous image from screen while selecting new images
+    setStatus(false);
     const images = e.target.files;
 
-    //const allowedImages = Array.from(images).slice(0, 2) && img.length < 2
 
-    //allowed only select two images and total also only two images.
-    const allowedImages = Array.from(Array.from(images).slice(0, 2)).filter(
-      (file) => file.type === 'image/png' && img.length < 2
-    );
+    if (Array.from(images).length > 1) { // allowed only 2 or more than two images
 
-    setImg([...img, ...allowedImages]);
+      const allowedImages = Array.from(Array.from(images).slice(0, 2)).filter(
+        (file) => file.type === 'image/png' && img.length < 2
+      );
 
-    //setImg(...img, ...Images); ---- for multiple images
+      setImg([...img, ...allowedImages]);
 
-    setDefaultImg(URL.createObjectURL(e.target.files[0]))
+      const imagesArray = Array.from(allowedImages).map((file) => URL.createObjectURL(file));
+      setPreviewImages([...previewImages, ...imagesArray]);
 
-
-    const imagesArray = Array.from(allowedImages).map((file) => URL.createObjectURL(file));
-    setPreviewImages([...previewImages, ...imagesArray]);
+    } else {      // show the warning pop
+      Swal.fire({
+        icon: "warning",
+        title: 'Warning',
+        text: "select two images!!",
+      })
+    }
   }
 
   //formData object 
@@ -61,17 +64,37 @@ export const Double = () => {
 
   const submit = () => {
 
-    DoubleService.uploadImage(formData).then(Response => {
-      setStatus(true);
-      console.log(Response.data.image1.identity);
-      console.log(Response.data.image2.identity);
+    if (img.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: 'Warning',
+        text: "select image!!",
+      })
 
-      setResponse([Response.data.image1.identity, Response.data.image2.identity])
-    })
-      .catch(error => {
-        // Handle error
-        console.log("Error uploading image:", error);
-      });
+
+    } else {
+      setLoading(true);
+      DoubleService.uploadImage(formData).then(Response => {
+        setLoading(false); // off the loading bar
+        setStatus(true);
+        console.log(Response.data.image1.identity);
+        console.log(Response.data.image2.identity);
+
+        setResponse([Response.data.image1.identity, Response.data.image2.identity])
+      })
+        .catch(error => {
+
+          setLoading(false); // off the loading bar
+          // Handle error
+          Swal.fire({
+            icon: "error",
+            title: 'Error',
+            text: "Some thing went wrong",
+          })
+          console.log("Error uploading image:", error);
+        });
+    }
+
   }
 
   const correct = () => {
@@ -89,13 +112,12 @@ export const Double = () => {
     <div onDragOver={handleDragOver}
       onDrop={handleDrop} className="container-fluid">
 
-
       <div className="row ">
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="file" className=" btn btn-dark show col-6" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
           </div>
-          <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
         </div>
       </div>
 
@@ -105,11 +127,13 @@ export const Double = () => {
 
         {previewImages.map((image, index) => (
           <div>
-
             <div className="col">
               {/* <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" /> */}
               <img key={index} src={image} alt={`Preview ${index}`} className="rounded-circle image" />
             </div>
+
+            {loading && <LoadingBar></LoadingBar>}
+
             {status &&
               <div className="box outerbox col">
                 <h3>{response[index]}</h3>
@@ -132,6 +156,10 @@ export const Double = () => {
             multiple
             ref={inputRef} />
 
+          {/* (e) => {
+              
+              uploadImage(e.target.files);
+            } */}
         </label>
 
       </div>
