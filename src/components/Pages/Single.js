@@ -39,7 +39,9 @@ export const Single = () => {
 
 
   const clear = (e) => {
-    setImg(defaultImg);
+    setStatus(false);
+    setImg([]);
+    setDefaultImg("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   }
 
 
@@ -117,7 +119,7 @@ export const Single = () => {
       <div className="row row-cols-auto">
         <div className="col"></div>
         <div className="col-3">
-          <img src={img} alt="Cinque Terre" className="rounded-circle image" />
+          <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
         </div>
 
         {loading && <LoadingBar></LoadingBar>}
@@ -149,7 +151,8 @@ export const Single = () => {
             accept=".png"
             onChange={(e) => {
               setStatus(false);
-              setImg(URL.createObjectURL(e.target.files[0]));
+              setImg(e.target.files[0]);
+              setDefaultImg(URL.createObjectURL(e.target.files[0]))
             }}
             hidden
             ref={inputRef} />

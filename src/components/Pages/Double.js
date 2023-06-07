@@ -46,8 +46,8 @@ export const Double = () => {
   //selecting the multiple images
   const uploadImage = (e) => {
     setStatus(false);
-    // const images = e.target.files;
-    const images = e;
+    const images = e.target.files;
+    // const images = e;
 
 
     if (Array.from(images).length > 1) { // allowed only 2 or more than two images
