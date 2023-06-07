@@ -4,7 +4,7 @@ import axios from 'axios';
 function uploadImage(data) {
     //make api call for auth
     console.log("post request " + data.values())
-    return axios.post("/multiple_image", data
+    return axios.post("/multiple_images", data
         , {
             headers: {
                 'content-type': 'multipart/form-data'

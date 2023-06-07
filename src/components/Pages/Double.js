@@ -25,14 +25,29 @@ export const Double = () => {
 
   const handleDrop = (event) => {
     event.preventDefault();
-    setImg(event.dataTransfer.files[0]);
+    // setImg(URL.createObjectURL(event.dataTransfer.files[0]));
+
+    const allowedImages = event.dataTransfer.files;
+    setImg([...img, ...allowedImages]);
+
+    const imagesArray = Array.from(img).map((file) => URL.createObjectURL(file));
+    setPreviewImages([...previewImages, ...imagesArray]);
+
+    //uploadImage(event);
   }
+
+
+  const clear = (e) => {
+    setImg([]);
+    setPreviewImages([]);
+  }
+
 
   //selecting the multiple images
   const uploadImage = (e) => {
-    setPreviewImages([]);  // clear the previous image from screen while selecting new images
     setStatus(false);
-    const images = e.target.files;
+    // const images = e.target.files;
+    const images = e;
 
 
     if (Array.from(images).length > 1) { // allowed only 2 or more than two images
@@ -115,8 +130,9 @@ export const Double = () => {
       <div className="row ">
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button>
-            <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
+            <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>
+            <button type="file" className=" btn btn-primary show" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="button" className="btn btn-success show" onClick={submit}>Submit </button>
           </div>
         </div>
       </div>
@@ -128,7 +144,6 @@ export const Double = () => {
         {previewImages.map((image, index) => (
           <div>
             <div className="col">
-              {/* <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" /> */}
               <img key={index} src={image} alt={`Preview ${index}`} className="rounded-circle image" />
             </div>
 

@@ -29,6 +29,8 @@ export const Multiple = () => {
 
   //selecting the multiple images
   const uploadImage = (e) => {
+
+
     const images = e.target.files;
 
     const uniqueFiles = Array.from([...img, ...images]).reduce((unique, file) => {
@@ -46,10 +48,13 @@ export const Multiple = () => {
   const formData = new FormData();
 
   img.forEach((file) => {
-    formData.append('image', file)
+    formData.append('images', file)
   })
 
-
+  const clear = (e) => {
+    setImg([]);
+    setPreviewImages([]);
+  }
 
   const submit = () => {
 
@@ -67,10 +72,10 @@ export const Multiple = () => {
 
         setLoading(false); // off the loading bar
         setStatus(true);
-        console.log(Response.data.image1.identity);
-        console.log(Response.data.image2.identity);
+        console.log(Response.data[0].identity);
+        // console.log(Response.data.image2.identity);
 
-        setResponse([Response.data.image1.identity, Response.data.image2.identity])
+        setResponse(Response.data)
       })
         .catch(error => {
           setLoading(false); // off the loading bar
@@ -102,8 +107,9 @@ export const Multiple = () => {
       <div className="row">
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example" >
-            <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button>
-            <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
+            <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>
+            <button type="file" className=" btn btn-primary show" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="button" className="btn btn-success  show" onClick={submit}>Submit </button>
           </div>
         </div>
       </div>
@@ -122,7 +128,7 @@ export const Multiple = () => {
 
             {status &&
               <div className="box outerbox col">
-                <h3>{response[index]}</h3>
+                <h3>{response[index].identity}</h3>
                 <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
                   <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
                 </p>
@@ -137,7 +143,9 @@ export const Multiple = () => {
           <input type="file"
             name="image"
             accept=".png"
-            onChange={uploadImage}
+            onChange={(e) => {
+              uploadImage(e);
+            }}
             hidden
             multiple
             ref={inputRef} />

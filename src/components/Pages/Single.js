@@ -16,11 +16,13 @@ export const Single = () => {
 
   const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState(defaultImg);
   const [status, setStatus] = useState(false)
   const [response, setResponse] = useState(" ")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [feedbackStatus, setFeedbackStatus] = useState("")
+  const [fileName, setFileName] = useState("")
 
 
 
@@ -30,12 +32,16 @@ export const Single = () => {
 
   const handleDrop = (event) => {
     event.preventDefault();
-    setImg(event.dataTransfer.files[0]);
-    setDefaultImg(URL.createObjectURL(event.dataTransfer.files[0]))
-
+    setImg(URL.createObjectURL(event.dataTransfer.files[0]));
   }
   const formData = new FormData();
   formData.append('image', img);
+
+
+  const clear = (e) => {
+    setImg(defaultImg);
+  }
+
 
 
   const submit = () => {
@@ -54,31 +60,44 @@ export const Single = () => {
         setLoading(false);
         setStatus(true);
         console.log(Response.data);
+        setFileName(Response.data.filename);
         setResponse(Response.data.identity);
-      })
-        .catch(error => {
-          // Handle error
-          setLoading(false);
-          setError(true)
-          Swal.fire({
-            icon: "error",
-            title: 'Error',
-            text: "Some thing went wrong",
-          })
-          console.log("Error uploading image:", error);
-        });
+
+      }).catch(error => {
+        // Handle error
+        setLoading(false);
+        setError(true)
+        Swal.fire({
+          icon: "error",
+          title: 'Error',
+          text: "Some thing went wrong",
+        })
+        console.log("Error uploading image:", error);
+      });
     }
   }
-  const correct = () => {
-    SingleService.feedback("correct")
+
+  const feedbackObj = {
+    feedbackStatus,
+    fileName
   }
 
-  const wrong = () => {
-    SingleService.feedback("wrong")
-  }
+  const feedbackFun = () => {
+    setLoading(true);
+    SingleService.feedback(feedbackObj).then(Response => {
+      setLoading(false);
+      console.log(Response.data);
 
-  const result = () => {
-
+    }).catch(error => {
+      // Handle error
+      setLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: 'Error',
+        text: "Some thing went wrong",
+      })
+      console.log("Error uploading image:", error);
+    });
   }
 
   return (
@@ -88,8 +107,9 @@ export const Single = () => {
       <div className="row">
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example" >
-            <button type="file" className=" btn btn-dark show" onClick={() => inputRef.current.click()}>Upload Image</button>
-            <button type="button" className="btn btn-primary show" onClick={submit}>Submit </button>
+            <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>
+            <button type="file" className=" btn btn-primary show" onClick={() => inputRef.current.click()}>Upload Image</button>
+            <button type="button" className="btn btn-success show" onClick={submit}>Submit </button>
           </div>
         </div>
       </div>
@@ -97,7 +117,7 @@ export const Single = () => {
       <div className="row row-cols-auto">
         <div className="col"></div>
         <div className="col-3">
-          <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
+          <img src={img} alt="Cinque Terre" className="rounded-circle image" />
         </div>
 
         {loading && <LoadingBar></LoadingBar>}
@@ -107,8 +127,15 @@ export const Single = () => {
             {/* <CircularProgressbar className="percentage" value={percentage} text={`${percentage}%`} />
           <h4>Human Probability</h4> */}
             <h3>{response}</h3>
-            <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
-              <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
+            <p> <span onClick={(e) => {
+              setFeedbackStatus("correct");
+              feedbackFun()
+            }}><ImCheckmark style={{ height: "30px" }} /></span>
+
+              <span onClick={(e) => {
+                setFeedbackStatus("Wrong");
+                feedbackFun()
+              }}><ImCross style={{ height: "25px" }} /></span>
             </p>
           </div>
         }
@@ -122,8 +149,7 @@ export const Single = () => {
             accept=".png"
             onChange={(e) => {
               setStatus(false);
-              setImg(e.target.files[0]);
-              setDefaultImg(URL.createObjectURL(e.target.files[0]))
+              setImg(URL.createObjectURL(e.target.files[0]));
             }}
             hidden
             ref={inputRef} />
