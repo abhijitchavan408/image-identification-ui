@@ -3,7 +3,7 @@ pipeline{
      environment{     
     DOCKERHUB_CREDENTIALS= credentials('dockerhub_id')
     GITHUB_CREDENTIALS= credentials('github_id')
-    REVISION = 53
+    REVISION = 60
     HARBOR_CREDENTIALS = credentials('harbor_id') 
     
 } 
@@ -50,9 +50,8 @@ pipeline{
           
           stage('Git update'){
           agent{
-     label 'argocd'
+     label 'imageidentificationfront'
      }
-     
      steps {
             script {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
