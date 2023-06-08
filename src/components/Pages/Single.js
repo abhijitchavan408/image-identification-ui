@@ -13,15 +13,15 @@ import Swal from 'sweetalert2'
 export const Single = () => {
 
 
-
   const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
-  const [img, setImg] = useState(defaultImg);
+  const [img, setImg] = useState([]);
+  const [imagePreview, setImagePreview] = useState(defaultImg);
   const [status, setStatus] = useState(false)
-  const [response, setResponse] = useState(" ")
+  const [response, setResponse] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
-  const [feedbackStatus, setFeedbackStatus] = useState("")
+  const [feedbackStatus, setFeedbackStatus] = useState(" ")
   const [fileName, setFileName] = useState("")
 
 
@@ -38,10 +38,19 @@ export const Single = () => {
   formData.append('image', img);
 
 
+  useEffect(() => {
+    if (img !== undefined && img.length !== 0) {
+      setImagePreview(URL.createObjectURL(img))
+    }
+  }, [img])
+
+
+
   const clear = (e) => {
     setStatus(false);
+    setFeedbackStatus(" ");
     setImg([]);
-    setDefaultImg("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+    setImagePreview(defaultImg)
   }
 
 
@@ -84,23 +93,40 @@ export const Single = () => {
     fileName
   }
 
-  const feedbackFun = () => {
-    setLoading(true);
-    SingleService.feedback(feedbackObj).then(Response => {
-      setLoading(false);
-      console.log(Response.data);
+  // const feedbackFun = (e) => {
 
-    }).catch(error => {
-      // Handle error
-      setLoading(false);
-      Swal.fire({
-        icon: "error",
-        title: 'Error',
-        text: "Some thing went wrong",
+  useEffect(() => {
+
+    if (feedbackStatus !== " ") {
+      setLoading(true);
+      SingleService.feedback(feedbackObj).then(Response => {
+        setLoading(false);
+        console.log(Response.data);
+        Swal.fire({
+          icon: "success",
+          title: 'success',
+          text: "Your response has recorded!!",
+        })
+
+        setFeedbackStatus(" ");
+        setStatus(false);
+
+      }).catch(error => {
+        // Handle error
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: 'Error',
+          text: "Some thing went wrong",
+        })
+        console.log("Error uploading image:", error);
+        setFeedbackStatus(" ");
+        setStatus(false);
       })
-      console.log("Error uploading image:", error);
-    });
-  }
+    }
+  }, [feedbackStatus])
+
+
 
   return (
     <div onDragOver={handleDragOver}
@@ -119,7 +145,7 @@ export const Single = () => {
       <div className="row row-cols-auto">
         <div className="col"></div>
         <div className="col-3">
-          <img src={defaultImg} alt="Cinque Terre" className="rounded-circle image" />
+          <img src={imagePreview} alt="Cinque Terre" className="rounded-circle image" />
         </div>
 
         {loading && <LoadingBar></LoadingBar>}
@@ -131,12 +157,10 @@ export const Single = () => {
             <h3>{response}</h3>
             <p> <span onClick={(e) => {
               setFeedbackStatus("correct");
-              feedbackFun()
             }}><ImCheckmark style={{ height: "30px" }} /></span>
 
               <span onClick={(e) => {
                 setFeedbackStatus("Wrong");
-                feedbackFun()
               }}><ImCross style={{ height: "25px" }} /></span>
             </p>
           </div>
@@ -152,7 +176,7 @@ export const Single = () => {
             onChange={(e) => {
               setStatus(false);
               setImg(e.target.files[0]);
-              setDefaultImg(URL.createObjectURL(e.target.files[0]))
+
             }}
             hidden
             ref={inputRef} />
