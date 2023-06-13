@@ -1,6 +1,6 @@
 
 import React, { useRef } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DoubleService from "../../service/DoubleService";
 import "../../css/NavBar.css"
 import "../../css/Single.css"
@@ -9,7 +9,7 @@ import { ImCheckmark, ImCross } from "react-icons/im";
 import { LoadingBar } from "../LoadingBar";
 import Swal from 'sweetalert2'
 
-export const Double = () => {
+export const TwoImages = () => {
 
   const inputRef = useRef();
   const [img, setImg] = useState([]);
@@ -17,6 +17,8 @@ export const Double = () => {
   const [status, setStatus] = useState(false)
   const [response, setResponse] = useState([])
   const [loading, setLoading] = useState(false)
+  const [feedbackStatus, setFeedbackStatus] = useState(" ")
+  const [fileName, setFileName] = useState("")
 
 
   const handleDragOver = (event) => {
@@ -32,12 +34,18 @@ export const Double = () => {
 
     const imagesArray = Array.from(img).map((file) => URL.createObjectURL(file));
     setPreviewImages([...previewImages, ...imagesArray]);
-
     //uploadImage(event);
   }
 
 
+  // useEffect(() => {
+  //   if (img !== undefined && img.length !== 0) {
+  //     setPreviewImages(URL.createObjectURL(img))
+  //   }
+  // }, [img])
+
   const clear = (e) => {
+    setPreviewImages(" ")
     setImg([]);
     setPreviewImages([]);
   }
@@ -47,19 +55,20 @@ export const Double = () => {
   const uploadImage = (e) => {
     setStatus(false);
     const images = e.target.files;
-    // const images = e;
-
+    //const images = e;
+    console.log("image number: " + images.length)
 
     if (Array.from(images).length > 1) { // allowed only 2 or more than two images
+      console.log("in side image number: " + images.length)
 
-      const allowedImages = Array.from(Array.from(images).slice(0, 2)).filter(
-        (file) => file.type === 'image/png' && img.length < 2
-      );
+      const allowedImages = Array.from(Array.from(images).slice(0, 2))
+      // .filter((file) => file.type === 'image/png' && img.length < 2);
 
-      setImg([...img, ...allowedImages]);
+      console.log("allowed image number: " + allowedImages.length)
+      setImg([...allowedImages]);
 
       const imagesArray = Array.from(allowedImages).map((file) => URL.createObjectURL(file));
-      setPreviewImages([...previewImages, ...imagesArray]);
+      setPreviewImages([...imagesArray]);
 
     } else {      // show the warning pop
       Swal.fire({
@@ -112,14 +121,39 @@ export const Double = () => {
 
   }
 
-  const correct = () => {
-    DoubleService.feedback("correct")
+  const feedbackObj = {
+    feedbackStatus,
+    fileName
   }
 
-  const wrong = () => {
-    DoubleService.feedback("wrong")
-  }
 
+  useEffect(() => {
+    if (feedbackStatus !== " ") {
+      setLoading(true);
+      DoubleService.feedback(feedbackObj).then(Response => {
+        setLoading(false);
+        console.log(Response.data);
+        Swal.fire({
+          icon: "success",
+          title: 'success',
+          text: "Your response has recorded!!",
+        })
+        setFeedbackStatus(" ");
+        setStatus(false);
+      }).catch(error => {
+        // Handle error	
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: 'Error',
+          text: "Some thing went wrong",
+        })
+        console.log("Error uploading image:", error);
+        setFeedbackStatus(" ");
+        setStatus(false);
+      })
+    }
+  }, [feedbackStatus])
 
 
 
@@ -128,6 +162,7 @@ export const Double = () => {
       onDrop={handleDrop} className="container-fluid">
 
       <div className="row ">
+        <h4 className="col heading">Double</h4>
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>
@@ -152,8 +187,12 @@ export const Double = () => {
             {status &&
               <div className="box outerbox col">
                 <h3>{response[index]}</h3>
-                <p> <span onClick={correct}><ImCheckmark style={{ height: "30px" }} /></span>
-                  <span onClick={wrong}><ImCross style={{ height: "25px" }} /></span>
+                <p> <span onClick={(e) => {
+                  setFeedbackStatus("correct");
+                }}><ImCheckmark style={{ height: "30px" }} /></span>
+                  <span onClick={(e) => {
+                    setFeedbackStatus("Wrong");
+                  }}><ImCross style={{ height: "25px" }} /></span>
                 </p>
               </div>}
           </div>
@@ -166,7 +205,9 @@ export const Double = () => {
           <input type="file"
             name="image"
             accept=".png"
-            onChange={uploadImage}
+            onChange={
+              uploadImage
+            }
             hidden
             multiple
             ref={inputRef} />

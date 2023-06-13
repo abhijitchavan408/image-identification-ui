@@ -10,13 +10,13 @@ import { LoadingBar } from "../LoadingBar";
 import Swal from 'sweetalert2'
 
 
-export const Single = () => {
+export const SingleImage = () => {
 
 
   const [defaultImg, setDefaultImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
   const inputRef = useRef();
   const [img, setImg] = useState([]);
-  const [imagePreview, setImagePreview] = useState(defaultImg);
+  const [previewImages, setPreviewImages] = useState(defaultImg);
   const [status, setStatus] = useState(false)
   const [response, setResponse] = useState("")
   const [loading, setLoading] = useState(false)
@@ -40,7 +40,7 @@ export const Single = () => {
 
   useEffect(() => {
     if (img !== undefined && img.length !== 0) {
-      setImagePreview(URL.createObjectURL(img))
+      setPreviewImages(URL.createObjectURL(img))
     }
   }, [img])
 
@@ -50,7 +50,7 @@ export const Single = () => {
     setStatus(false);
     setFeedbackStatus(" ");
     setImg([]);
-    setImagePreview(defaultImg)
+    setPreviewImages(defaultImg)
   }
 
 
@@ -104,7 +104,7 @@ export const Single = () => {
         console.log(Response.data);
         Swal.fire({
           icon: "success",
-          title: 'success',
+          title: 'Success',
           text: "Your response has recorded!!",
         })
 
@@ -133,6 +133,7 @@ export const Single = () => {
       onDrop={handleDrop} className="container-fluid">
 
       <div className="row">
+        <h4 className="col heading">Single</h4>
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example" >
             <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>
@@ -145,7 +146,7 @@ export const Single = () => {
       <div className="row row-cols-auto">
         <div className="col"></div>
         <div className="col-3">
-          <img src={imagePreview} alt="Cinque Terre" className="rounded-circle image" />
+          <img src={previewImages} alt="Cinque Terre" className="rounded-circle image" />
         </div>
 
         {loading && <LoadingBar></LoadingBar>}

@@ -8,7 +8,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { ImCheckmark, ImCross } from "react-icons/im";
 import Swal from 'sweetalert2'
 
-export const Multiple = () => {
+export const MultipleImages = () => {
 
   const inputRef = useRef();
   const [img, setImg] = useState([]);
@@ -30,9 +30,7 @@ export const Multiple = () => {
   //selecting the multiple images
   const uploadImage = (e) => {
 
-
     const images = e.target.files;
-
     const uniqueFiles = Array.from([...img, ...images]).reduce((unique, file) => {
       const fileExists = unique.some((item) => item.name === file.name);
       return fileExists ? unique : [...unique, file];
@@ -105,6 +103,7 @@ export const Multiple = () => {
 
 
       <div className="row">
+        <h4 className="col heading">Multiple</h4>
         <div className="col button">
           <div class="btn-group" role="group" aria-label="Basic example" >
             <button type="button" className="btn btn-danger show" onClick={clear}>Clear </button>

@@ -38,6 +38,17 @@
   margin-right: 2rem;
 }
 
+.nav-button {
+  display: flex;
+  list-style: none;
+  text-align: center;
+  margin-right: 100px;
+}
+
+.menu-item {
+  width: 10px;
+}
+
 .nav-links {
   color: #fff;
   text-decoration: none;

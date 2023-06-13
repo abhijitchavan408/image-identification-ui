@@ -3,6 +3,12 @@
     justify-content: end;
 }
 
+.heading {
+    display: flex;
+    justify-content: flex-start;
+    color: lime;
+}
+
 .image {
     content: "";
     height: 200px;
@@ -15,6 +21,7 @@
     height: 125px;
     width: 125px;
 }
+
 
 /* body {
     height: 100vh;
