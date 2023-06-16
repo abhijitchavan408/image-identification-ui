@@ -1,7 +1,7 @@
 import axios from 'axios';
-//axios.defaults.baseURL = "http://20.204.215.95:8000"; //sumit
+axios.defaults.baseURL = "http://20.204.215.95:8000"; //sumit
 
-axios.defaults.baseURL = "http://34.136.177.220:8000"; // rutik
+//axios.defaults.baseURL = "http://34.136.177.220:8000"; // rutik
 function uploadImage(data) {
     //make api call for auth
     console.log(data)

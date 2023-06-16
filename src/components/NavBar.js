@@ -21,9 +21,9 @@ function NavBar() {
                 Image
               </button>
               <ul className="dropdown-menu dropdown-menu-dark menu-item" aria-labelledby="dropdownMenuButton2">
-                <li><a className="dropdown-item" href="/">Single</a></li>
-                <li><a className="dropdown-item" href="/double">Double</a></li>
-                <li><a className="dropdown-item" href="/multiple">Multiple</a></li>
+                <li><a className="dropdown-item" href="/single-image">Single</a></li>
+                <li><a className="dropdown-item" href="/two-images">Double</a></li>
+                <li><a className="dropdown-item" href="/multiple-images">Multiple</a></li>
               </ul>
             </div>
             <div className="dropdown">
@@ -32,9 +32,9 @@ function NavBar() {
                 AdharCard
               </button>
               <ul className="dropdown-menu dropdown-menu-dark menu-item" aria-labelledby="dropdownMenuButton2">
-                <li><a className="dropdown-item" href="/">Single</a></li>
-                <li><a className="dropdown-item" href="/double">Double</a></li>
-                <li><a className="dropdown-item" href="/multiple">Multiple</a></li>
+                <li><a className="dropdown-item" href="/single-adharcard">Single</a></li>
+                <li><a className="dropdown-item" href="/two-adharcards">Double</a></li>
+                <li><a className="dropdown-item" href="/multiple-adharcards">Multiple</a></li>
               </ul>
             </div>
 
