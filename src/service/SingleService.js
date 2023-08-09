@@ -1,5 +1,5 @@
 import axios from 'axios';
-axios.defaults.baseURL = "https://image-identification-backend-git-pipelines-tutorial.apps.hpeopenshift.eastus.aroapp.io/"; //sumit
+axios.defaults.baseURL = "https://image-identification-backend-git-imageadentificationapplication.apps.hpeopenshift.eastus.aroapp.io/"; //sumit
 
 //axios.defaults.baseURL = "http://34.136.177.220:8000"; // rutik
 function uploadImage(data) {
