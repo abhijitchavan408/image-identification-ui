@@ -13,6 +13,7 @@ function NavBar() {
         <div className="nav-container">
           <div className="col">
             <img src={logo} className="nav-logo" />
+          <div> Welcome to HPE </div>
           </div>
           <div className="nav-button">
             <div className="dropdown">
